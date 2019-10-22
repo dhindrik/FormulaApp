@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="FormulaApp.Views.MainView"
+             xmlns:vm="clr-namespace:FormulaApp.ViewModels"
+             xmlns:feed="clr-namespace:CodeHollow.FeedReader;assembly=CodeHollow.FeedReader"
+             x:DataType="vm:MainViewModel" Title="Formula App">
+    <Grid>
+        <ActivityIndicator VerticalOptions="Center" HorizontalOptions="Center" IsRunning="True" IsVisible="{Binding IsBusy}" />
+    <Grid RowSpacing="20" IsVisible="{Binding IsNotBusy}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="200" />
+        </Grid.RowDefinitions>
+
+         <CarouselView ItemsSource="{Binding PrimaryItems}">
+             <CarouselView.ItemsLayout>
+                 <LinearItemsLayout Orientation="Horizontal"  SnapPointsAlignment="Start" SnapPointsType="MandatorySingle" />
+             </CarouselView.ItemsLayout>
+             <CarouselView.ItemTemplate>
+                 <DataTemplate x:DataType="{x:Null}">
+                               <Grid>
+                                   <Grid.RowDefinitions>
+                                       <RowDefinition Height="*" />
+                                       <RowDefinition Height="Auto" />
+                                   </Grid.RowDefinitions>
+                                   <Image Grid.RowSpan="2" Aspect="AspectFill" Source="{Binding SpecificItem.Enclosure.Url}" />
+                                   <ContentView Padding="10" Grid.Row="1" BackgroundColor="#AAFFFFFF">
+                                       <Label Text="{Binding Title}" LineBreakMode="WordWrap" FontSize="Title" FontAttributes="Bold" />
+                                   </ContentView>
+                                   
+                               </Grid>
+                </DataTemplate>
+             </CarouselView.ItemTemplate>
+         </CarouselView>
+
+        <Label Margin="10,0" Grid.Row="1" Text="Formual E" TextDecorations="Underline" FontAttributes="Bold" FontSize="Title" />
+
+         <CarouselView Margin="10,0,0,20" Grid.Row="2" ItemsSource="{Binding SecondaryItems}">
+             <CarouselView.ItemsLayout>
+                 <LinearItemsLayout Orientation="Horizontal" SnapPointsAlignment="Start" SnapPointsType="Mandatory" />
+             </CarouselView.ItemsLayout>
+             <CarouselView.ItemTemplate>
+                 <DataTemplate x:DataType="{x:Null}">
+                               <Grid ColumnSpacing="10">
+                                  
+                                   <Grid.ColumnDefinitions>
+                                       <ColumnDefinition Width="200" />
+                                       <ColumnDefinition Width="*" />
+                                   </Grid.ColumnDefinitions>
+                                   <Image Aspect="AspectFill" Source="{Binding SpecificItem.Enclosure.Url}" />
+                                   <ContentView Padding="10" Grid.Column="1">
+                                       <Label Text="{Binding Title}" LineBreakMode="WordWrap" FontSize="Subtitle" FontAttributes="Bold" />
+                                   </ContentView>
+                                   
+                               </Grid>
+                </DataTemplate>
+             </CarouselView.ItemTemplate>
+         </CarouselView>
+
+    </Grid>
+        </Grid>
+  
+</ContentPage>

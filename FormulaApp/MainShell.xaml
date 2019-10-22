@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="FormulaApp.MainShell" xmlns:views="clr-namespace:FormulaApp.Views" Shell.TitleColor="White" Shell.BackgroundColor="{StaticResource PrimaryColor}" Shell.TabBarBackgroundColor="White" Shell.TabBarTitleColor="{StaticResource PrimaryColor}">
+    <TabBar>
+        <ShellContent Title="Home">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="&#xf015;" FontFamily="{OnPlatform iOS='Font Awesome 5 Free', Android=FontAwesome.otf#}" Size="22" />
+            </ShellContent.Icon>
+            <views:MainView />
+        </ShellContent>
+
+        <Tab Title="News">
+            <Tab.Icon>
+                <FontImageSource Glyph="&#xf1ea;" FontFamily="{OnPlatform iOS='Font Awesome 5 Free', Android=FontAwesome.otf#}" Size="22" />
+            </Tab.Icon>
+            <ShellContent Title="All" ContentTemplate="{DataTemplate views:AllNews}" />
+            <ShellContent Title="Formula 1" ContentTemplate="{DataTemplate views:FormulaOneView}" />
+
+            <ShellContent Title="Formula E" ContentTemplate="{DataTemplate views:FormulaEView}" />
+        </Tab>
+
+        <ShellContent Title="About" ContentTemplate="{DataTemplate views:AboutView}">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="&#xf05a;" FontFamily="{OnPlatform iOS='Font Awesome 5 Free', Android=FontAwesome.otf#}" Size="22" />
+            </ShellContent.Icon>
+        </ShellContent>
+    </TabBar>
+</Shell>
