@@ -19,13 +19,17 @@
              <CarouselView.ItemTemplate>
                  <DataTemplate x:DataType="{x:Null}">
                                <Grid>
+                                   <Grid.GestureRecognizers>
+                                       <TapGestureRecognizer Command="{Binding Open}" />
+                                   </Grid.GestureRecognizers>
+
                                    <Grid.RowDefinitions>
                                        <RowDefinition Height="*" />
                                        <RowDefinition Height="Auto" />
                                    </Grid.RowDefinitions>
-                                   <Image Grid.RowSpan="2" Aspect="AspectFill" Source="{Binding SpecificItem.Enclosure.Url}" />
+                                   <Image Grid.RowSpan="2" Aspect="AspectFill" Source="{Binding Item.SpecificItem.Enclosure.Url}" />
                                    <ContentView Padding="10" Grid.Row="1" BackgroundColor="#AAFFFFFF">
-                                       <Label Text="{Binding Title}" LineBreakMode="WordWrap" FontSize="Title" FontAttributes="Bold" />
+                                       <Label Text="{Binding Item.Title}" LineBreakMode="WordWrap" FontSize="Title" FontAttributes="Bold" />
                                    </ContentView>
                                    
                                </Grid>
@@ -42,14 +46,16 @@
              <CarouselView.ItemTemplate>
                  <DataTemplate x:DataType="{x:Null}">
                                <Grid ColumnSpacing="10">
-                                  
+                                  <Grid.GestureRecognizers>
+                                       <TapGestureRecognizer Command="{Binding Open}" />
+                                   </Grid.GestureRecognizers>
                                    <Grid.ColumnDefinitions>
                                        <ColumnDefinition Width="200" />
                                        <ColumnDefinition Width="*" />
                                    </Grid.ColumnDefinitions>
-                                   <Image Aspect="AspectFill" Source="{Binding SpecificItem.Enclosure.Url}" />
+                                   <Image Aspect="AspectFill" Source="{Binding Item.SpecificItem.Enclosure.Url}" />
                                    <ContentView Padding="10" Grid.Column="1">
-                                       <Label Text="{Binding Title}" LineBreakMode="WordWrap" FontSize="Subtitle" FontAttributes="Bold" />
+                                       <Label Text="{Binding Item.Title}" LineBreakMode="WordWrap" FontSize="Subtitle" FontAttributes="Bold" />
                                    </ContentView>
                                    
                                </Grid>

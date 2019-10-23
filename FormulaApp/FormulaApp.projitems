@@ -57,6 +57,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\AllNews.xaml.cs">
       <DependentUpon>AllNews.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\FeedItemViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)ViewModels\" />

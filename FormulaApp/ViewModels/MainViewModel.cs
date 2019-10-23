@@ -21,12 +21,12 @@ namespace FormulaApp.ViewModels
             {
                 await NewsService.FetchData();
 
-                var f1Result = NewsService.GetF1();
-                var feResult = NewsService.GetFE();
+                var f1Result = NewsService.GetF1().Select(x => new FeedItemViewModel(x));
+                var feResult = NewsService.GetFE().Select(x => new FeedItemViewModel(x));
 
                 MainThread.BeginInvokeOnMainThread(() => {
-                    PrimaryItems = new ObservableCollection<FeedItem>(f1Result.Take(10));
-                    SecondaryItems = new ObservableCollection<FeedItem>(feResult.Take(10));
+                    PrimaryItems = new ObservableCollection<FeedItemViewModel>(f1Result.Take(10));
+                    SecondaryItems = new ObservableCollection<FeedItemViewModel>(feResult.Take(10));
 
                     IsBusy = false;
                 });
@@ -34,20 +34,23 @@ namespace FormulaApp.ViewModels
 
         }
 
-        private ObservableCollection<FeedItem> primaryItems;
-        public ObservableCollection<FeedItem> PrimaryItems
+        private ObservableCollection<FeedItemViewModel> primaryItems;
+        public ObservableCollection<FeedItemViewModel> PrimaryItems
         {
             get => primaryItems;
             set => Set(ref primaryItems, value);
         }
 
-        private ObservableCollection<FeedItem> secondaryItems;
-        public ObservableCollection<FeedItem> SecondaryItems
+        private ObservableCollection<FeedItemViewModel> secondaryItems;
+        public ObservableCollection<FeedItemViewModel> SecondaryItems
         {
             get => secondaryItems;
             set => Set(ref secondaryItems, value);
         }
 
-        
+        public ICommand GoToWeb => new Command(async() =>
+        {
+            await Browser.OpenAsync("https://motorsport.com");
+        });
     }
 }

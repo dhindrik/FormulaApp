@@ -128,6 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\FontAwesome.otf" />
+    <BundleResource Include="Resources\senna.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\FormulaApp\FormulaApp.projitems" Label="Shared" />

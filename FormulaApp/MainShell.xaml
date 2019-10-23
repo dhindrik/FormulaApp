@@ -1,6 +1,17 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Shell xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="FormulaApp.MainShell" xmlns:views="clr-namespace:FormulaApp.Views" Shell.TitleColor="White" Shell.BackgroundColor="{StaticResource PrimaryColor}" Shell.TabBarBackgroundColor="White" Shell.TabBarTitleColor="{StaticResource PrimaryColor}">
-    <TabBar>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="FormulaApp.MainShell" xmlns:views="clr-namespace:FormulaApp.Views" Shell.TitleColor="White" Shell.BackgroundColor="{StaticResource PrimaryColor}" Shell.TabBarBackgroundColor="White" Shell.TabBarTitleColor="{StaticResource PrimaryColor}"
+  Shell.ForegroundColor="White">
+    <Shell.FlyoutHeader>
+            <StackLayout>
+                <Label Margin="20,0" FontAttributes="Bold" Text="Formula App" FontSize="Title" />
+            <Image HeightRequest="200" Source="senna.jpg" Aspect="AspectFill" />
+            </StackLayout>
+    </Shell.FlyoutHeader>
+    <Shell.FlyoutBackgroundColor>#AACCCCCC</Shell.FlyoutBackgroundColor>
+    <FlyoutItem Title="News">
+        <FlyoutItem.Icon>
+            <FontImageSource Glyph="&#xf1ea;" FontFamily="{OnPlatform iOS='Font Awesome 5 Free', Android=FontAwesome.otf#}" Size="22" Color="Black" />
+    </FlyoutItem.Icon>
         <ShellContent Title="Home">
             <ShellContent.Icon>
                 <FontImageSource Glyph="&#xf015;" FontFamily="{OnPlatform iOS='Font Awesome 5 Free', Android=FontAwesome.otf#}" Size="22" />
@@ -18,10 +29,18 @@
             <ShellContent Title="Formula E" ContentTemplate="{DataTemplate views:FormulaEView}" />
         </Tab>
 
-        <ShellContent Title="About" ContentTemplate="{DataTemplate views:AboutView}">
+       
+
+        </FlyoutItem>
+
+     <ShellContent Title="About" ContentTemplate="{DataTemplate views:AboutView}">
             <ShellContent.Icon>
-                <FontImageSource Glyph="&#xf05a;" FontFamily="{OnPlatform iOS='Font Awesome 5 Free', Android=FontAwesome.otf#}" Size="22" />
+                <FontImageSource Glyph="&#xf05a;" FontFamily="{OnPlatform iOS='Font Awesome 5 Free', Android=FontAwesome.otf#}" Size="22" Color="Black" />
             </ShellContent.Icon>
         </ShellContent>
-    </TabBar>
+    <MenuItem Text="Motorsport.com" Command="{Binding GoToWeb}">
+        <MenuItem.IconImageSource>
+              <FontImageSource Glyph="&#xf1b9;" FontFamily="{OnPlatform iOS='Font Awesome 5 Free', Android=FontAwesome.otf#}" Size="22" Color="Black" />
+        </MenuItem.IconImageSource>
+        </MenuItem>
 </Shell>
