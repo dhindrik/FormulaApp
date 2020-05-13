@@ -25,7 +25,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>FormulaApp</string>
 	<key>CFBundleIdentifier</key>
-	<string>hindrikes.FormulaApp</string>
+	<string>hindrikes.formulaapp.dev</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>UILaunchStoryboardName</key>
