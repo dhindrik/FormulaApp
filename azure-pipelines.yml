@@ -208,6 +208,8 @@ stages:
         customCommand: 'install -g appcenter-cli'
      
      - bash: |
-        appcenter test run uitest --app "Daniel-Hindrikes/FormulaApp" --devices "Daniel-Hindrikes/ios-dev" --app-path "$(System.ArtifactsDirectory)/iOS_dev/FormulaApp.iOS.ipa" --test-series "master" --locale "sv_SE" --build-dir "$(System.ArtifactsDirectory)/tests" --uitest-tools-dir "$(System.ArtifactsDirectory)/test_tool" --token $(AppCenterToken) --async
+        appcenter test run uitest --app "Daniel-Hindrikes/FormulaApp" --devices "Daniel-Hindrikes/ios-dev" --app-path "$(System.ArtifactsDirectory)/iOS_dev/FormulaApp.iOS.ipa" --test-series "master" --locale "sv_SE" --build-dir "$(System.ArtifactsDirectory)/tests" --uitest-tools-dir "$(System.ArtifactsDirectory)/test_tool" --token $(AppCenterToken) --vstsIdVariable TestRunId
        displayName: 'Bash Script'
        continueOnError: true
+     - bash: |
+        appcenter test download --test-run-id $(TestRunId)  
