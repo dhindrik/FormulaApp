@@ -1,7 +1,4 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+name: '1.0.0'
 
 trigger:
 - master
@@ -9,11 +6,127 @@ trigger:
 pool:
   vmImage: 'macos-latest'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+ - name: MONO_VERSION 
+   value: '6_8_0'
+ - name: NETCORE_VERSION
+   value: '3.0.x'
+ - name: XCODE_VERSION
+   value: 11.4  
+ - group: 'AppSecrets'
+ 
+jobs:
+- job: iOS
+  steps:
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  - task: Bash@3
+    inputs:
+     targetType: 'inline'
+     script: |
+      SYMLINK=$(MONO_VERSION)
+              MONOPREFIX=/Library/Frameworks/Mono.framework/Versions/$SYMLINK
+              echo "##vso[task.setvariable variable=DYLD_FALLBACK_LIBRARY_PATH;]$MONOPREFIX/lib:/lib:/usr/lib:$DYLD_LIBRARY_FALLBACK_PATH"
+              echo "##vso[task.setvariable variable=PKG_CONFIG_PATH;]$MONOPREFIX/lib/pkgconfig:$MONOPREFIX/share/pkgconfig:$PKG_CONFIG_PATH"
+              echo "##vso[task.setvariable variable=PATH;]$MONOPREFIX/bin:$PATH"
+
+  - bash: 'sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)'
+    displayName: 'Set Mono/Xamarin version'
+
+
+  - task: UseDotNet@2
+    displayName: 'Use .Net Core sdk 3.1.x'
+    inputs:
+     version: 3.1.x
+
+
+  - task: NuGetToolInstaller@1
+    displayName: 'Use NuGet '
+    inputs:
+     versionSpec: 4.x
+
+  - task: NuGetCommand@2
+    displayName: 'NuGet restore'
+    inputs:
+      command: 'restore'
+
+  - task: InstallAppleCertificate@2
+    displayName: 'Install an Apple certificate'
+    inputs:
+     certSecureFile: 'Hindrikes.p12'
+     certPwd: '$(AppleCertificatePassword)'
+
+  - task: InstallAppleProvisioningProfile@1
+    displayName: 'Install an Apple provisioning profile'
+    inputs:
+     provProfileSecureFile: 'FormulaAppDev.mobileprovision'
+
+  - task: InstallAppleProvisioningProfile@1
+    displayName: 'Install an Apple provisioning profile'
+    inputs:
+     provProfileSecureFile: 'FormulaApp.mobileprovision'
+
+  - task: vs-publisher-473885.motz-mobile-buildtasks.ios-bundle-identifier.ios-bundle-identifier@1
+    displayName: 'Change identifier in FormulaApp.iOS/Info.plist'
+    inputs:
+     sourcePath: FormulaApp.iOS/Info.plist
+     bundleIdentifier: hindrikes.formulapp.dev
+     bundleName: 'Formula App Dev'
+     bundleDisplayName: 'Formula App Dev'
+
+  - task: vs-publisher-473885.motz-mobile-buildtasks.ios-bundle-version.ios-bundle-version@1
+    displayName: 'Bump iOS Versions in FormulaApp.iOS/Info.plist'
+    inputs:
+     sourcePath: FormulaApp.iOS/Info.plist
+     versionName: '$(Build.BuildNumber)'
+     versionCode: '$(Build.BuildId)'
+
+  - task: XamariniOS@2 
+    displayName: 'Build iOS Dev'
+    inputs:
+      solutionFile: 'FormulaApp.iOS/FormulaApp.iOS.csproj'
+      configuration: 'Dev'
+      packageApp: true
+  - task: CopyFiles@2
+    displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)/iOS/dev'
+    inputs:
+     SourceFolder: FormulaApp.iOS/bin/iphone/dev
+     Contents: '**/*.ipa'
+     TargetFolder: '$(Build.ArtifactStagingDirectory)/iOS/dev'
+     flattenFolders: true      
+
+  - task: vs-publisher-473885.motz-mobile-buildtasks.ios-bundle-identifier.ios-bundle-identifier@1
+    displayName: 'Change identifier in FormulaApp.iOS/Info.plist'
+    inputs:
+     sourcePath: FormulaApp.iOS/Info.plist
+     bundleIdentifier: hindrikes.formulapp
+     bundleName: 'Formula App'
+     bundleDisplayName: 'Formula App'
+
+  - task: XamariniOS@2
+    displayName: 'Build iOS Release'
+    inputs:
+      solutionFile: 'FormulaApp.iOS/FormulaApp.iOS.csproj'
+      configuration: 'Release'
+      packageApp: true
+      runNugetRestore: true
+
+  - task: CopyFiles@2
+    displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)/iOS/dev'
+    inputs:
+     SourceFolder: FormulaApp.iOS/bin/iphone/release
+     Contents: '**/*.ipa'
+     TargetFolder: '$(Build.ArtifactStagingDirectory)/iOS/release'
+     flattenFolders: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: iOS'
+    inputs:
+     PathtoPublish: '$(Build.ArtifactStagingDirectory)/iOS/dev'
+     ArtifactName: iOS_dev
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: iOS'
+    inputs:
+     PathtoPublish: '$(Build.ArtifactStagingDirectory)/iOS/release'
+     ArtifactName: iOS_release     
+
