@@ -98,7 +98,7 @@ jobs:
     displayName: 'Change identifier in FormulaApp.iOS/Info.plist'
     inputs:
      sourcePath: FormulaApp.iOS/Info.plist
-     bundleIdentifier: hindrikes.formulaApp
+     bundleIdentifier: hindrikes.FormulaApp
      bundleName: 'Formula App'
      bundleDisplayName: 'Formula App'
 
