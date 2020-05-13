@@ -2,7 +2,6 @@
 using System.Windows.Input;
 using CodeHollow.FeedReader;
 using CodeHollow.FeedReader.Feeds;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace FormulaApp.ViewModels
@@ -18,7 +17,11 @@ namespace FormulaApp.ViewModels
 
         public ICommand Open => new Command(async() =>
         {
-            await Browser.OpenAsync(Item.Link);
+#if !WPF
+            await Xamarin.Essentials.Browser.OpenAsync(Item.Link);
+#else
+            System.Diagnostics.Process.Start(Item.Link);
+#endif
         });
 
         public string Image

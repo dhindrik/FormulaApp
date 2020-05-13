@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Input;
 using CodeHollow.FeedReader;
 using FormulaApp.Services;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace FormulaApp.ViewModels
@@ -83,7 +82,11 @@ namespace FormulaApp.ViewModels
 
         public ICommand ItemSelected => new Command<FeedItemViewModel>(async (item) =>
         {
-            await Browser.OpenAsync(item.Item.Link);
+#if !WPF
+            await Xamarin.Essentials.Browser.OpenAsync(item.Item.Link);
+#else
+            System.Diagnostics.Process.Start(item.Item.Link);
+#endif
         });
     }
 }
