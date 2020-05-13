@@ -14,119 +14,200 @@ variables:
  - name: XCODE_VERSION
    value: 11.4  
  - group: 'AppSecrets'
- 
-jobs:
-- job: iOS
-  steps:
 
-  - task: Bash@3
-    inputs:
-     targetType: 'inline'
-     script: |
-      SYMLINK=$(MONO_VERSION)
-              MONOPREFIX=/Library/Frameworks/Mono.framework/Versions/$SYMLINK
-              echo "##vso[task.setvariable variable=DYLD_FALLBACK_LIBRARY_PATH;]$MONOPREFIX/lib:/lib:/usr/lib:$DYLD_LIBRARY_FALLBACK_PATH"
-              echo "##vso[task.setvariable variable=PKG_CONFIG_PATH;]$MONOPREFIX/lib/pkgconfig:$MONOPREFIX/share/pkgconfig:$PKG_CONFIG_PATH"
-              echo "##vso[task.setvariable variable=PATH;]$MONOPREFIX/bin:$PATH"
+stages:
+- stage: build 
+  jobs:
+  - job: iOS
+    steps:
+     - task: Bash@3
+       inputs:
+        targetType: 'inline'
+        script: |
+               SYMLINK=$(MONO_VERSION)
+               MONOPREFIX=/Library/Frameworks/Mono.framework/Versions/$SYMLINK
+               echo "##vso[task.setvariable variable=DYLD_FALLBACK_LIBRARY_PATH;]$MONOPREFIX/lib:/lib:/usr/lib:$DYLD_LIBRARY_FALLBACK_PATH"
+               echo "##vso[task.setvariable variable=PKG_CONFIG_PATH;]$MONOPREFIX/lib/pkgconfig:$MONOPREFIX/share/pkgconfig:$PKG_CONFIG_PATH"
+               echo "##vso[task.setvariable variable=PATH;]$MONOPREFIX/bin:$PATH"
 
-  - bash: 'sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)'
-    displayName: 'Set Mono/Xamarin version'
+     - bash: 'sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)'
+       displayName: 'Set Mono/Xamarin version'
 
+     - task: UseDotNet@2
+       displayName: 'Use .Net Core sdk 3.1.x'
+       inputs:
+        version: 3.1.x
 
-  - task: UseDotNet@2
-    displayName: 'Use .Net Core sdk 3.1.x'
-    inputs:
-     version: 3.1.x
+     - task: NuGetToolInstaller@1
+       displayName: 'Use NuGet '
+       inputs:
+        versionSpec: 4.x
 
+     - task: NuGetCommand@2
+       displayName: 'NuGet restore'
+       inputs:
+         command: 'restore'
 
-  - task: NuGetToolInstaller@1
-    displayName: 'Use NuGet '
-    inputs:
-     versionSpec: 4.x
+     - task: InstallAppleCertificate@2
+       displayName: 'Install an Apple certificate'
+       inputs:
+        certSecureFile: 'Hindrikes.p12'
+        certPwd: '$(AppleCertificatePassword)'
 
-  - task: NuGetCommand@2
-    displayName: 'NuGet restore'
-    inputs:
-      command: 'restore'
+     - task: InstallAppleProvisioningProfile@1
+       displayName: 'Install an Apple provisioning profile'
+       inputs:
+         provProfileSecureFile: 'FormulaAppDev.mobileprovision'
 
-  - task: InstallAppleCertificate@2
-    displayName: 'Install an Apple certificate'
-    inputs:
-     certSecureFile: 'Hindrikes.p12'
-     certPwd: '$(AppleCertificatePassword)'
+     - task: InstallAppleProvisioningProfile@1
+       displayName: 'Install an Apple provisioning profile'
+       inputs:
+        provProfileSecureFile: 'FormulaApp.mobileprovision'
 
-  - task: InstallAppleProvisioningProfile@1
-    displayName: 'Install an Apple provisioning profile'
-    inputs:
-     provProfileSecureFile: 'FormulaAppDev.mobileprovision'
+     - task: vs-publisher-473885.motz-mobile-buildtasks.ios-bundle-identifier.ios-bundle-identifier@1
+       displayName: 'Change identifier in FormulaApp.iOS/Info.plist'
+       inputs:
+        sourcePath: FormulaApp.iOS/Info.plist
+        bundleIdentifier: hindrikes.formulaapp.dev
+        bundleName: 'Formula App Dev'
+        bundleDisplayName: 'Formula App Dev'
 
-  - task: InstallAppleProvisioningProfile@1
-    displayName: 'Install an Apple provisioning profile'
-    inputs:
-     provProfileSecureFile: 'FormulaApp.mobileprovision'
+     - task: vs-publisher-473885.motz-mobile-buildtasks.ios-bundle-version.ios-bundle-version@1
+       displayName: 'Bump iOS Versions in FormulaApp.iOS/Info.plist'
+       inputs:
+        sourcePath: FormulaApp.iOS/Info.plist
+        versionName: '$(Build.BuildNumber)'
+        versionCode: '$(Build.BuildId)'
 
-  - task: vs-publisher-473885.motz-mobile-buildtasks.ios-bundle-identifier.ios-bundle-identifier@1
-    displayName: 'Change identifier in FormulaApp.iOS/Info.plist'
-    inputs:
-     sourcePath: FormulaApp.iOS/Info.plist
-     bundleIdentifier: hindrikes.formulaapp.dev
-     bundleName: 'Formula App Dev'
-     bundleDisplayName: 'Formula App Dev'
+     - task: XamariniOS@2 
+       displayName: 'Build iOS Dev'
+       inputs:
+        solutionFile: 'FormulaApp.iOS/FormulaApp.iOS.csproj'
+        configuration: 'Dev'
+        packageApp: true
+     - task: CopyFiles@2
+       displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)/iOS/dev'
+       inputs:
+        SourceFolder: FormulaApp.iOS/bin/iphone/dev
+        Contents: '**/*.ipa'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/iOS/dev'
+        flattenFolders: true      
 
-  - task: vs-publisher-473885.motz-mobile-buildtasks.ios-bundle-version.ios-bundle-version@1
-    displayName: 'Bump iOS Versions in FormulaApp.iOS/Info.plist'
-    inputs:
-     sourcePath: FormulaApp.iOS/Info.plist
-     versionName: '$(Build.BuildNumber)'
-     versionCode: '$(Build.BuildId)'
+     - task: vs-publisher-473885.motz-mobile-buildtasks.ios-bundle-identifier.ios-bundle-identifier@1
+       displayName: 'Change identifier in FormulaApp.iOS/Info.plist'
+       inputs:
+        sourcePath: FormulaApp.iOS/Info.plist
+        bundleIdentifier: hindrikes.FormulaApp
+        bundleName: 'Formula App'
+        bundleDisplayName: 'Formula App'
 
-  - task: XamariniOS@2 
-    displayName: 'Build iOS Dev'
-    inputs:
-      solutionFile: 'FormulaApp.iOS/FormulaApp.iOS.csproj'
-      configuration: 'Dev'
-      packageApp: true
-  - task: CopyFiles@2
-    displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)/iOS/dev'
-    inputs:
-     SourceFolder: FormulaApp.iOS/bin/iphone/dev
-     Contents: '**/*.ipa'
-     TargetFolder: '$(Build.ArtifactStagingDirectory)/iOS/dev'
-     flattenFolders: true      
+     - task: XamariniOS@2
+       displayName: 'Build iOS Release'
+       inputs:
+        solutionFile: 'FormulaApp.iOS/FormulaApp.iOS.csproj'
+        configuration: 'Release'
+        packageApp: true
+        runNugetRestore: true
 
-  - task: vs-publisher-473885.motz-mobile-buildtasks.ios-bundle-identifier.ios-bundle-identifier@1
-    displayName: 'Change identifier in FormulaApp.iOS/Info.plist'
-    inputs:
-     sourcePath: FormulaApp.iOS/Info.plist
-     bundleIdentifier: hindrikes.FormulaApp
-     bundleName: 'Formula App'
-     bundleDisplayName: 'Formula App'
+     - task: CopyFiles@2
+       displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)/iOS/dev'
+       inputs:
+        SourceFolder: FormulaApp.iOS/bin/iphone/release
+        Contents: '**/*.ipa'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/iOS/release'
+        flattenFolders: true
 
-  - task: XamariniOS@2
-    displayName: 'Build iOS Release'
-    inputs:
-      solutionFile: 'FormulaApp.iOS/FormulaApp.iOS.csproj'
-      configuration: 'Release'
-      packageApp: true
-      runNugetRestore: true
+     - task: PublishBuildArtifacts@1
+       displayName: 'Publish Artifact: iOS'
+       inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/iOS/dev'
+        ArtifactName: iOS_dev
 
-  - task: CopyFiles@2
-    displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)/iOS/dev'
-    inputs:
-     SourceFolder: FormulaApp.iOS/bin/iphone/release
-     Contents: '**/*.ipa'
-     TargetFolder: '$(Build.ArtifactStagingDirectory)/iOS/release'
-     flattenFolders: true
+     - task: PublishBuildArtifacts@1
+       displayName: 'Publish Artifact: iOS'
+       inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/iOS/release'
+        ArtifactName: iOS_release     
+  - job: buildTest
+    pool:
+     vmImage: 'windows-latest'
+    
+    steps:
+    - task: NuGetToolInstaller@1
+      inputs:
+       versionSpec: 5.x
 
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: iOS'
-    inputs:
-     PathtoPublish: '$(Build.ArtifactStagingDirectory)/iOS/dev'
-     ArtifactName: iOS_dev
+    - task: NuGetCommand@2
+      inputs:
+        command: 'restore'
+        restoreSolution: '**/*.sln'
+    - task: MSBuild@1
+      inputs:
+        solution: '**/*UiTests.csproj'
+        configuration: 'Release'
+    
+    - task: CopyFiles@2
+      displayName: 'Copy test tools file'
+      inputs:
+       Contents: packages/Xamarin.UITest.*/tools/test-cloud.exe
+       TargetFolder: '$(build.artifactstagingdirectory)/test-tool'
+       flattenFolders: true
 
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: iOS'
-    inputs:
-     PathtoPublish: '$(Build.ArtifactStagingDirectory)/iOS/release'
-     ArtifactName: iOS_release     
+    - task: CopyFiles@2 
+      displayName: 'Copy test assemblies'
+      inputs:
+       SourceFolder: 'FormulaApp.UiTests/bin'
+       Contents: '**/*.dll'
+       TargetFolder: '$(build.artifactstagingdirectory)/tests'
+       flattenFolders: true
 
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: TestTool'
+      inputs:
+       PathtoPublish: '$(Build.ArtifactStagingDirectory)/test-tool'
+       ArtifactName: 'test_tool'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: Test Assembky'
+      inputs:
+       PathtoPublish: '$(Build.ArtifactStagingDirectory)/tests'
+       ArtifactName: 'tests'
+
+- stage: test
+  jobs:
+   - job: iOS
+     steps:
+     - task: DownloadBuildArtifacts@0
+       inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'iOS_dev'
+        downloadPath: '$(System.ArtifactsDirectory)'
+     - task: DownloadBuildArtifacts@0
+       inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'tests'
+        downloadPath: '$(System.ArtifactsDirectory)'
+     - task: DownloadBuildArtifacts@0
+       inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'test_tool'
+        downloadPath: '$(System.ArtifactsDirectory)'
+     - task: NodeTool@0
+       displayName: 'Use Node 12.x'
+       inputs:
+        versionSpec: 12.x
+        checkLatest: true
+     - task: Npm@1
+       displayName: 'npm custom'
+       inputs:
+        command: custom
+        verbose: false
+        customCommand: 'install -g appcenter-cli'
+     
+     - bash: |
+        appcenter test run uitest --app "users/Daniel-Hindrikes/FormulaApp" --devices "Daniel-Hindrikes/ios-dev" --app-path "$(System.ArtifactsDirectory)/iOS_dev/FormulaApp.iOS.ipa" --test-series "master" --locale "sv_SE" --build-dir "$(System.ArtifactsDirectory)/tests" --uitest-tools-dir "$(System.ArtifactsDirectory)/test_tool" --token $(AppCenterToken) --async
+       displayName: 'Bash Script'
+       continueOnError: true
