@@ -18,6 +18,23 @@ variables:
 stages:
 - stage: build 
   jobs:
+  - job: 
+    pool:
+     vmImage: 'windows-latest'
+    
+    steps:
+    - task: NuGetToolInstaller@1
+
+    - task: NuGetCommand@2
+      inputs:
+       restoreSolution: '**/*.sln'
+
+    - task: VSBuild@1
+      inputs:
+       solution: '**/*.sln'
+       platform: 'Any CPU'
+       configuration: 'WPF'
+
   - job: iOS
     steps:
      - task: Bash@3
