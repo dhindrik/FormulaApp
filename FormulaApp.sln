@@ -30,6 +30,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|iPhone = Release|iPhone
 		Release|iPhoneSimulator = Release|iPhoneSimulator
+		WPF|Any CPU = WPF|Any CPU
+		WPF|iPhone = WPF|iPhone
+		WPF|iPhoneSimulator = WPF|iPhoneSimulator
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B9759674-8A32-4875-98B5-241DF6B8822E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -52,6 +55,13 @@ Global
 		{B9759674-8A32-4875-98B5-241DF6B8822E}.Release|iPhone.Build.0 = Release|Any CPU
 		{B9759674-8A32-4875-98B5-241DF6B8822E}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{B9759674-8A32-4875-98B5-241DF6B8822E}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{B9759674-8A32-4875-98B5-241DF6B8822E}.WPF|Any CPU.ActiveCfg = WPF|Any CPU
+		{B9759674-8A32-4875-98B5-241DF6B8822E}.WPF|iPhone.ActiveCfg = WPF|Any CPU
+		{B9759674-8A32-4875-98B5-241DF6B8822E}.WPF|iPhone.Build.0 = WPF|Any CPU
+		{B9759674-8A32-4875-98B5-241DF6B8822E}.WPF|iPhone.Deploy.0 = WPF|Any CPU
+		{B9759674-8A32-4875-98B5-241DF6B8822E}.WPF|iPhoneSimulator.ActiveCfg = WPF|Any CPU
+		{B9759674-8A32-4875-98B5-241DF6B8822E}.WPF|iPhoneSimulator.Build.0 = WPF|Any CPU
+		{B9759674-8A32-4875-98B5-241DF6B8822E}.WPF|iPhoneSimulator.Deploy.0 = WPF|Any CPU
 		{EA1D197E-08F8-4E09-AE02-678E2866D5A7}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
 		{EA1D197E-08F8-4E09-AE02-678E2866D5A7}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
 		{EA1D197E-08F8-4E09-AE02-678E2866D5A7}.Debug|iPhone.ActiveCfg = Debug|iPhone
@@ -70,6 +80,13 @@ Global
 		{EA1D197E-08F8-4E09-AE02-678E2866D5A7}.Release|iPhone.Build.0 = Release|iPhone
 		{EA1D197E-08F8-4E09-AE02-678E2866D5A7}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{EA1D197E-08F8-4E09-AE02-678E2866D5A7}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{EA1D197E-08F8-4E09-AE02-678E2866D5A7}.WPF|Any CPU.ActiveCfg = WPF|iPhone
+		{EA1D197E-08F8-4E09-AE02-678E2866D5A7}.WPF|iPhone.ActiveCfg = WPF|iPhone
+		{EA1D197E-08F8-4E09-AE02-678E2866D5A7}.WPF|iPhone.Build.0 = WPF|iPhone
+		{EA1D197E-08F8-4E09-AE02-678E2866D5A7}.WPF|iPhone.Deploy.0 = WPF|iPhone
+		{EA1D197E-08F8-4E09-AE02-678E2866D5A7}.WPF|iPhoneSimulator.ActiveCfg = WPF|iPhoneSimulator
+		{EA1D197E-08F8-4E09-AE02-678E2866D5A7}.WPF|iPhoneSimulator.Build.0 = WPF|iPhoneSimulator
+		{EA1D197E-08F8-4E09-AE02-678E2866D5A7}.WPF|iPhoneSimulator.Deploy.0 = WPF|iPhoneSimulator
 		{7B477FAA-FFD7-41FD-BB93-12F1BAE31DA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7B477FAA-FFD7-41FD-BB93-12F1BAE31DA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B477FAA-FFD7-41FD-BB93-12F1BAE31DA1}.Debug|iPhone.ActiveCfg = Debug|Any CPU
@@ -88,6 +105,11 @@ Global
 		{7B477FAA-FFD7-41FD-BB93-12F1BAE31DA1}.Release|iPhone.Build.0 = Release|Any CPU
 		{7B477FAA-FFD7-41FD-BB93-12F1BAE31DA1}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{7B477FAA-FFD7-41FD-BB93-12F1BAE31DA1}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{7B477FAA-FFD7-41FD-BB93-12F1BAE31DA1}.WPF|Any CPU.ActiveCfg = WPF|Any CPU
+		{7B477FAA-FFD7-41FD-BB93-12F1BAE31DA1}.WPF|iPhone.ActiveCfg = WPF|Any CPU
+		{7B477FAA-FFD7-41FD-BB93-12F1BAE31DA1}.WPF|iPhone.Build.0 = WPF|Any CPU
+		{7B477FAA-FFD7-41FD-BB93-12F1BAE31DA1}.WPF|iPhoneSimulator.ActiveCfg = WPF|Any CPU
+		{7B477FAA-FFD7-41FD-BB93-12F1BAE31DA1}.WPF|iPhoneSimulator.Build.0 = WPF|Any CPU
 		{FF7739D0-7EB5-4783-9D4B-E4812CA37F00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FF7739D0-7EB5-4783-9D4B-E4812CA37F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF7739D0-7EB5-4783-9D4B-E4812CA37F00}.Debug|iPhone.ActiveCfg = Debug|Any CPU
@@ -106,6 +128,12 @@ Global
 		{FF7739D0-7EB5-4783-9D4B-E4812CA37F00}.Release|iPhone.Build.0 = Release|Any CPU
 		{FF7739D0-7EB5-4783-9D4B-E4812CA37F00}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{FF7739D0-7EB5-4783-9D4B-E4812CA37F00}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{FF7739D0-7EB5-4783-9D4B-E4812CA37F00}.WPF|Any CPU.ActiveCfg = WPF|Any CPU
+		{FF7739D0-7EB5-4783-9D4B-E4812CA37F00}.WPF|Any CPU.Build.0 = WPF|Any CPU
+		{FF7739D0-7EB5-4783-9D4B-E4812CA37F00}.WPF|iPhone.ActiveCfg = WPF|Any CPU
+		{FF7739D0-7EB5-4783-9D4B-E4812CA37F00}.WPF|iPhone.Build.0 = WPF|Any CPU
+		{FF7739D0-7EB5-4783-9D4B-E4812CA37F00}.WPF|iPhoneSimulator.ActiveCfg = WPF|Any CPU
+		{FF7739D0-7EB5-4783-9D4B-E4812CA37F00}.WPF|iPhoneSimulator.Build.0 = WPF|Any CPU
 		{2C76ACF9-5A85-4460-8E8B-3F2C65D173C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2C76ACF9-5A85-4460-8E8B-3F2C65D173C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C76ACF9-5A85-4460-8E8B-3F2C65D173C9}.Debug|iPhone.ActiveCfg = Debug|Any CPU
@@ -124,6 +152,12 @@ Global
 		{2C76ACF9-5A85-4460-8E8B-3F2C65D173C9}.Release|iPhone.Build.0 = Release|Any CPU
 		{2C76ACF9-5A85-4460-8E8B-3F2C65D173C9}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{2C76ACF9-5A85-4460-8E8B-3F2C65D173C9}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{2C76ACF9-5A85-4460-8E8B-3F2C65D173C9}.WPF|Any CPU.ActiveCfg = WPF|Any CPU
+		{2C76ACF9-5A85-4460-8E8B-3F2C65D173C9}.WPF|Any CPU.Build.0 = WPF|Any CPU
+		{2C76ACF9-5A85-4460-8E8B-3F2C65D173C9}.WPF|iPhone.ActiveCfg = WPF|Any CPU
+		{2C76ACF9-5A85-4460-8E8B-3F2C65D173C9}.WPF|iPhone.Build.0 = WPF|Any CPU
+		{2C76ACF9-5A85-4460-8E8B-3F2C65D173C9}.WPF|iPhoneSimulator.ActiveCfg = WPF|Any CPU
+		{2C76ACF9-5A85-4460-8E8B-3F2C65D173C9}.WPF|iPhoneSimulator.Build.0 = WPF|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
