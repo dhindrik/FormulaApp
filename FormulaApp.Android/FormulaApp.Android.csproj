@@ -42,6 +42,18 @@
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Dev|AnyCPU' ">
+    <DebugType></DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Dev</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <JavaMaximumHeapSize></JavaMaximumHeapSize>
+    <AndroidEnableSGenConcurrent>false</AndroidEnableSGenConcurrent>
+    <AndroidUseAapt2>false</AndroidUseAapt2>
+    <AndroidManifest></AndroidManifest>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidSupportedAbis>arm64-v8a;armeabi-v7a;x86</AndroidSupportedAbis>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
     <Reference Include="System" />
@@ -52,8 +64,8 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="4.3.0.908675" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.2.0" />
+    <PackageReference Include="Xamarin.Forms" Version="4.6.0.726" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
     <PackageReference Include="CodeHollow.FeedReader">
       <Version>1.2.1</Version>
     </PackageReference>

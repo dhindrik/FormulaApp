@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 using CodeHollow.FeedReader;
-using CoreTelephony;
+using CodeHollow.FeedReader.Feeds;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -20,5 +20,23 @@ namespace FormulaApp.ViewModels
         {
             await Browser.OpenAsync(Item.Link);
         });
+
+        public string Image
+        {
+            get
+            {
+                if(Item != null)
+                {
+                    var rssItems = Item.SpecificItem as Rss20FeedItem;
+
+                    if(rssItems != null && rssItems.Enclosure != null)
+                    {
+                        return rssItems.Enclosure.Url;
+                    }
+                }
+
+                return string.Empty;
+            }
+        }
     }
 }

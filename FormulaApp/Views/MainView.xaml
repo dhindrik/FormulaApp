@@ -27,7 +27,7 @@
                                        <RowDefinition Height="*" />
                                        <RowDefinition Height="Auto" />
                                    </Grid.RowDefinitions>
-                                   <Image Grid.RowSpan="2" Aspect="AspectFill" Source="{Binding Item.SpecificItem.Enclosure.Url}" />
+                                   <Image Grid.RowSpan="2" Aspect="AspectFill" Source="{Binding Image}" />
                                    <ContentView Padding="10" Grid.Row="1" BackgroundColor="#AAFFFFFF">
                                        <Label Text="{Binding Item.Title}" LineBreakMode="WordWrap" FontSize="Title" FontAttributes="Bold" />
                                    </ContentView>
@@ -53,7 +53,7 @@
                                        <ColumnDefinition Width="200" />
                                        <ColumnDefinition Width="*" />
                                    </Grid.ColumnDefinitions>
-                                   <Image Aspect="AspectFill" Source="{Binding Item.SpecificItem.Enclosure.Url}" />
+                                   <Image Aspect="AspectFill" Source="{Binding Image}" />
                                    <ContentView Padding="10" Grid.Column="1">
                                        <Label Text="{Binding Item.Title}" LineBreakMode="WordWrap" FontSize="Subtitle" FontAttributes="Bold" />
                                    </ContentView>

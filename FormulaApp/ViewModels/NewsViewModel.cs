@@ -50,13 +50,13 @@ namespace FormulaApp.ViewModels
                 result = NewsService.GetAll();
             }
 
-            Items = new ObservableCollection<FeedItem>(result);
+            Items = new ObservableCollection<FeedItemViewModel>(result.Select(x => new FeedItemViewModel(x)));
 
             IsBusy = false;
         }
 
-        private ObservableCollection<FeedItem> items;
-        public ObservableCollection<FeedItem> Items
+        private ObservableCollection<FeedItemViewModel> items;
+        public ObservableCollection<FeedItemViewModel> Items
         {
             get => items;
             set => Set(ref items, value);
@@ -81,9 +81,9 @@ namespace FormulaApp.ViewModels
             IsRefreshing = false;
         });
 
-        public ICommand ItemSelected => new Command<FeedItem>(async (item) =>
+        public ICommand ItemSelected => new Command<FeedItemViewModel>(async (item) =>
         {
-            await Browser.OpenAsync(item.Link);
+            await Browser.OpenAsync(item.Item.Link);
         });
     }
 }

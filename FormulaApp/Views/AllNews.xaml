@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="FormulaApp.Views.AllNews" Title="News">
     <RefreshView Command="{Binding Refresh}" IsRefreshing="{Binding IsRefreshing}">
-        <CollectionView ItemsSource="{Binding Items}" Margin="10" SelectionChangedCommand="{Binding ItemSelected}" SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
+        <CollectionView ItemsSource="{Binding Items}" Margin="10" SelectionChangedCommand="{Binding ItemSelected}" SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}" AutomationId="NewsList">
 
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical" Span="2" VerticalItemSpacing="10" HorizontalItemSpacing="10" />
@@ -14,9 +14,9 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Image Grid.RowSpan="2" Aspect="AspectFill" Source="{Binding SpecificItem.Enclosure.Url}" />
+                        <Image Grid.RowSpan="2" Aspect="AspectFill" Source="{Binding Image}" />
                         <ContentView Padding="10" Grid.Row="1" BackgroundColor="#AAFFFFFF">
-                            <Label Text="{Binding Title}" LineBreakMode="WordWrap" FontSize="Caption" FontAttributes="Bold" />
+                            <Label Text="{Binding Item.Title}" LineBreakMode="WordWrap" FontSize="Caption" FontAttributes="Bold" />
                         </ContentView>
 
                     </Grid>

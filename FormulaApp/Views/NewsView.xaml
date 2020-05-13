@@ -14,9 +14,9 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <Image Grid.RowSpan="2" Source="{Binding SpecificItem.Enclosure.Url}" />
-                        <Label Grid.Column="1" LineBreakMode="WordWrap" FontAttributes="Bold" Text="{Binding Title}" />
-                        <Label Grid.Row="1" Grid.Column="1" LineBreakMode="TailTruncation" Text="{Binding Description}" />
+                        <Image Grid.RowSpan="2" Source="{Binding Image}" />
+                        <Label Grid.Column="1" LineBreakMode="WordWrap" FontAttributes="Bold" Text="{Binding Item.Title}" />
+                        <Label Grid.Row="1" Grid.Column="1" LineBreakMode="TailTruncation" Text="{Binding Item.Description}" />
                     </Grid>
                 
                 </DataTemplate>

@@ -23,6 +23,8 @@ namespace FormulaApp.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+            Xamarin.Calabash.Start();
+         
             Forms.SetFlags("CarouselView_Experimental");
 
 
