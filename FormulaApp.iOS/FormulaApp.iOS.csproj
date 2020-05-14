@@ -75,7 +75,7 @@
     <MtouchEnableSGenConc>false</MtouchEnableSGenConc>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchArch>ARM64</MtouchArch>
-    <CodesignProvision>Automatic:AdHoc</CodesignProvision>
+    <CodesignProvision>FormulaAppDev</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'WPF|iPhoneSimulator'">
     <DebugSymbols>true</DebugSymbols>

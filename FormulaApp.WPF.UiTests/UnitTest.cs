@@ -10,10 +10,10 @@ namespace FormulaApp.WPF.UiTests
     public class UnitTest
     {
         protected const string WindowsApplicationDriverUrl = "http://127.0.0.1:4723";
-#if WPF
+#if !WPF
         private const string WpfAppId = @"C:\Users\dhindrik\Source\Repos\dhindrik\FormulaApp\FormulaApp.WPF\bin\Debug\FormulaApp.WPF.exe";
 #else
-        private const string WpfAppId = "#{WpfAppId}#";
+        private const string WpfAppId = @"#{WpfAppId}#";
 #endif
 
         protected static WindowsDriver<WindowsElement> session;
