@@ -18,7 +18,7 @@ variables:
 stages:
 - stage: build 
   jobs:
-  - job: 
+  - job: WPF
     pool:
      vmImage: 'windows-latest'
     
@@ -34,6 +34,18 @@ stages:
        solution: '**/*.sln'
        platform: 'Any CPU'
        configuration: 'WPF'
+
+    - task: CopyFiles@2
+      inputs:
+       SourceFolder: 'FormulaApp.WPF/bin/WPF'
+       Contents: '**'
+       TargetFolder: '$(build.artifactstagingdirectory)/wpf'
+     
+    - task: PublishBuildArtifacts@1
+      inputs:
+       PathtoPublish: '$(Build.ArtifactStagingDirectory)/wpf'
+       ArtifactName: 'wpf'
+       publishLocation: 'Container'
 
   - job: iOS
     steps:
@@ -230,3 +242,11 @@ stages:
        continueOnError: true
      - bash: |
         appcenter test download --test-run-id $(TestRunId)  
+   - job: WPF
+     pool:
+      vmImage: 'windows-latest'
+     steps:
+     - task: Windows Application Driver@0
+       inputs:
+         OperationType: 'Start'
+         AgentResolution: '1080p'
