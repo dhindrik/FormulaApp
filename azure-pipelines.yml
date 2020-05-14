@@ -37,6 +37,7 @@ stages:
         targetFiles: 'UnitTest.cs'
         encoding: 'auto'
         writeBOM: true
+        verbosity: 'detailed'
         actionOnMissing: 'warn'
         keepToken: false
         tokenPrefix: '#{'
@@ -291,9 +292,7 @@ stages:
        inputs:
         testSelector: 'testAssemblies'
         testAssemblyVer2: |
-         **\*test*.dll
-         !**\*TestAdapter.dll
-         !**\obj\**
+         **\FormulaApp.WPF.UiTests.dll
         searchFolder: '$(System.ArtifactsDirectory)/wpf_tests'
 
      - task: Windows Application Driver@0
