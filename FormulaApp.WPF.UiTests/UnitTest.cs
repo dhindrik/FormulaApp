@@ -13,7 +13,7 @@ namespace FormulaApp.WPF.UiTests
 #if !WPF
         private const string WpfAppId = @"C:\Users\dhindrik\Source\Repos\dhindrik\FormulaApp\FormulaApp.WPF\bin\Debug\FormulaApp.WPF.exe";
 #else
-        private const string WpfAppId = "#{WpfAppId}#";
+        private const string WpfAppId = @"#{WpfAppId}#";
 #endif
 
         protected static WindowsDriver<WindowsElement> session;
