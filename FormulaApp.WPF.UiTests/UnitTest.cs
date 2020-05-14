@@ -10,7 +10,11 @@ namespace FormulaApp.WPF.UiTests
     public class UnitTest
     {
         protected const string WindowsApplicationDriverUrl = "http://127.0.0.1:4723";
+#if WPF
         private const string WpfAppId = @"C:\Users\dhindrik\Source\Repos\dhindrik\FormulaApp\FormulaApp.WPF\bin\Debug\FormulaApp.WPF.exe";
+#else
+        private const string WpfAppId = "#{WpfAppId}#";
+#endif
 
         protected static WindowsDriver<WindowsElement> session;
 
@@ -27,19 +31,15 @@ namespace FormulaApp.WPF.UiTests
         }
 
         [TestMethod]
-        public async Task Test()
+        public void Test()
         {
             var btnPrev = session.FindElementByAccessibilityId("btnPrev");
             var btnNext = session.FindElementByAccessibilityId("btnNext");
 
             btnNext.Click();
-            //await Task.Delay(100);
             btnNext.Click();
-          //  await Task.Delay(100);
             btnPrev.Click();
-          //  await Task.Delay(100);
             btnPrev.Click();
-         //   await Task.Delay(100);
             btnPrev.Click();
         }
     }
