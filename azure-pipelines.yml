@@ -297,3 +297,16 @@ stages:
      - task: Windows Application Driver@0
        inputs:
          OperationType: 'Stop'
+- stage: deploy
+- stage: deploy
+  jobs:
+  - deployment: DeployDev
+    displayName: Deploy to dev
+    pool:
+      vmImage: 'macos-latest'
+    environment: 'Dev'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: echo Hello world         
