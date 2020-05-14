@@ -65,7 +65,7 @@ stages:
     - task: CopyFiles@2
       inputs:
        SourceFolder: 'FormulaApp.WPF.UiTests/'
-       Contents: '**/*.dll'
+       Contents: '**/*.cs'
        TargetFolder: '$(build.artifactstagingdirectory)/source'
      
     - task: PublishBuildArtifacts@1
