@@ -316,7 +316,7 @@ stages:
 
 - stage: test
   jobs:
-   - job: iOS
+   - job: app
      steps:
      - task: DownloadBuildArtifacts@0
        inputs:
@@ -360,7 +360,7 @@ stages:
        continueOnError: true
        
      - bash: |
-        appcenter test run uitest --app "Daniel-Hindrikes/FormulaApp-1" --devices "Daniel-Hindrikes/android-dev" --app-path "$(System.ArtifactsDirectory)/android_dev/FormulaApp.iOS.apk" --test-series "master" --locale "sv_SE" --build-dir "$(System.ArtifactsDirectory)/tests" --uitest-tools-dir "$(System.ArtifactsDirectory)/test_tool" --token $(AppCenterToken) --vsts-id-variable TestRunId --async
+        appcenter test run uitest --app "Daniel-Hindrikes/FormulaApp-1" --devices "Daniel-Hindrikes/android-dev" --app-path "$(System.ArtifactsDirectory)/android_dev/hindrikes.formulaapp.dev.apk" --test-series "master" --locale "sv_SE" --build-dir "$(System.ArtifactsDirectory)/tests" --uitest-tools-dir "$(System.ArtifactsDirectory)/test_tool" --token $(AppCenterToken) --vsts-id-variable TestRunId --async
        displayName: 'Bash Script'
        continueOnError: true
     
