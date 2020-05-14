@@ -73,6 +73,11 @@ stages:
        PathtoPublish: '$(build.artifactstagingdirectory)/wpf_tests'
        ArtifactName: 'wpf_tests'
        publishLocation: 'Container'   
+    - task: PublishBuildArtifacts@1
+      inputs:
+       PathtoPublish: 'ForumlaApp.WPF.UiTests'
+       ArtifactName: 'wpf_test_code'
+       publishLocation: 'Container'
 
   - job: iOS
     steps:
