@@ -33,8 +33,7 @@ stages:
 
     - task: replacetokens@3
       inputs:
-        rootDirectory: 'ForumlaApp.WPF.UiTests'
-        targetFiles: 'UnitTest.cs'
+        targetFiles: '**/*.cs'
         encoding: 'auto'
         writeBOM: true
         verbosity: 'detailed'
