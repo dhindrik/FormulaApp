@@ -298,7 +298,6 @@ stages:
        inputs:
          OperationType: 'Stop'
 - stage: deploy
-- stage: deploy
   jobs:
   - deployment: DeployDev
     displayName: Deploy to dev
