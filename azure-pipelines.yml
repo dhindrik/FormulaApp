@@ -108,7 +108,7 @@ stages:
       displayName: 'Build Android Dev'
       inputs:
         projectFile: 'FormulaApp.Android/FormulaApp.Android.csproj'
-        target: '$(build.binariesDirectory)/bin/dev'
+        target: '$(Build.SourcesDirectory)/FormulaApp.Android/bin/dev'
         configuration: 'Release'
         jdkOption: 'JDKVersion'
     
@@ -124,7 +124,7 @@ stages:
       displayName: 'Build Android Dev'
       inputs:
         projectFile: 'FormulaApp.Android/FormulaApp.Android.csproj'
-        target: '$(build.binariesDirectory)/bin/release'
+        target: '$(Build.SourcesDirectory)/FormulaApp.Android/bin/release'
         configuration: 'Release'
         jdkOption: 'JDKVersion'
 
@@ -138,13 +138,13 @@ stages:
       
     - task: CopyFiles@2
       inputs:
-       SourceFolder: '$(build.binariesDirectory)/bin/dev'
+       SourceFolder: '$(Build.SourcesDirectory)/FormulaApp.Android/bin/dev'
        Contents: '**/*.apk'
        TargetFolder: '$(build.artifactstagingdirectory)/android_dev'
 
     - task: CopyFiles@2
       inputs:
-       SourceFolder: '$(build.binariesDirectory)/bin/release'
+       SourceFolder: '$(Build.SourcesDirectory)/FormulaApp.Android/bin/release'
        Contents: '**/*.apk'
        TargetFolder: '$(build.artifactstagingdirectory)/android_release'
     - task: PublishBuildArtifacts@1
