@@ -108,7 +108,7 @@ stages:
       displayName: 'Build Android Dev'
       inputs:
         projectFile: 'FormulaApp.Android/FormulaApp.Android.csproj'
-        target: '$(Build.SourcesDirectory)/FormulaApp.Android/bin/dev'
+        outputDirectory: '$(Build.SourcesDirectory)/FormulaApp.Android/bin/dev'
         configuration: 'Release'
         jdkOption: 'JDKVersion'
     
@@ -124,7 +124,7 @@ stages:
       displayName: 'Build Android Dev'
       inputs:
         projectFile: 'FormulaApp.Android/FormulaApp.Android.csproj'
-        target: '$(Build.SourcesDirectory)/FormulaApp.Android/bin/release'
+        outputDirectory: '$(Build.SourcesDirectory)/FormulaApp.Android/bin/release'
         configuration: 'Release'
         jdkOption: 'JDKVersion'
 
