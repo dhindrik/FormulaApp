@@ -62,6 +62,11 @@ stages:
        SourceFolder: 'FormulaApp.WPF.UiTests/bin/WPF'
        Contents: '**/*.dll'
        TargetFolder: '$(build.artifactstagingdirectory)/wpf_tests'
+    - task: CopyFiles@2
+      inputs:
+       SourceFolder: 'FormulaApp.WPF.UiTests/'
+       Contents: '**/*.dll'
+       TargetFolder: '$(build.artifactstagingdirectory)/source'
      
     - task: PublishBuildArtifacts@1
       inputs:
@@ -75,8 +80,8 @@ stages:
        publishLocation: 'Container'   
     - task: PublishBuildArtifacts@1
       inputs:
-       PathtoPublish: '$(Build.SourcesDirectory)/ForumlaApp.WPF.UiTests/'
-       ArtifactName: 'wpf_test_code'
+       PathtoPublish: '$(build.artifactstagingdirectory)/source'
+       ArtifactName: 'source'
        publishLocation: 'Container'
 
   - job: iOS
