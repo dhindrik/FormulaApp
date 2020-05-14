@@ -317,10 +317,11 @@ stages:
               
            - task: AppCenterDistribute@3
              inputs:
-              serverEndpoint: 'AppCenter'
-              appSlug: 'Daniel-Hindrikes/FormulaApp'
-              appFile: '$(System.ArtifactsDirectory)/iOS_dev/FormulaApp.iOS.ipa'
-              releaseNotesOption: 'input'
-              destinationType: 'groups'
+               serverEndpoint: 'AppCenter'
+               appSlug: 'Daniel-Hindrikes/FormulaApp'
+               appFile: '$(System.ArtifactsDirectory)/iOS_dev/FormulaApp.iOS.ipa'
+               releaseNotesOption: 'input'
+               releaseNotesInput: 'New improvments.'
+               destinationType: 'groups'
 
 
