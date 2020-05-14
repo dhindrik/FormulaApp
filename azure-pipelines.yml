@@ -13,6 +13,8 @@ variables:
    value: '3.0.x'
  - name: XCODE_VERSION
    value: 11.4  
+ - name: WpfAppId
+   value: '$(System.ArtifactsDirectory)/wpf/FormulaApp.WPF.exe'  
  - group: 'AppSecrets'
 
 stages:
@@ -29,6 +31,19 @@ stages:
       inputs:
        restoreSolution: '**/*.sln'
 
+    - task: replacetokens@3
+      inputs:
+        rootDirectory: 'ForumlaApp.WPF.UiTests'
+        targetFiles: 'UnitTest.cs'
+        encoding: 'auto'
+        writeBOM: true
+        actionOnMissing: 'warn'
+        keepToken: false
+        tokenPrefix: '#{'
+        tokenSuffix: '}#'
+        useLegacyPattern: false
+        enableTelemetry: true
+
     - task: VSBuild@1
       inputs:
        solution: '**/*.sln'
@@ -40,12 +55,23 @@ stages:
        SourceFolder: 'FormulaApp.WPF/bin/WPF'
        Contents: '**'
        TargetFolder: '$(build.artifactstagingdirectory)/wpf'
+  
+    - task: CopyFiles@2
+      inputs:
+       SourceFolder: 'FormulaApp.WPF.UiTests/bin/WPF'
+       Contents: '**/*.dll'
+       TargetFolder: '$(build.artifactstagingdirectory)/wpf_tests'
      
     - task: PublishBuildArtifacts@1
       inputs:
        PathtoPublish: '$(Build.ArtifactStagingDirectory)/wpf'
        ArtifactName: 'wpf'
        publishLocation: 'Container'
+    - task: PublishBuildArtifacts@1
+      inputs:
+       PathtoPublish: '$(build.artifactstagingdirectory)/wpf_tests'
+       ArtifactName: 'wpf_tests'
+       publishLocation: 'Container'   
 
   - job: iOS
     steps:
@@ -197,7 +223,7 @@ stages:
        ArtifactName: 'test_tool'
 
     - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact: Test Assembky'
+      displayName: 'Publish Artifact: Test Assembly'
       inputs:
        PathtoPublish: '$(Build.ArtifactStagingDirectory)/tests'
        ArtifactName: 'tests'
@@ -237,16 +263,39 @@ stages:
         customCommand: 'install -g appcenter-cli'
      
      - bash: |
-        appcenter test run uitest --app "Daniel-Hindrikes/FormulaApp" --devices "Daniel-Hindrikes/ios-dev" --app-path "$(System.ArtifactsDirectory)/iOS_dev/FormulaApp.iOS.ipa" --test-series "master" --locale "sv_SE" --build-dir "$(System.ArtifactsDirectory)/tests" --uitest-tools-dir "$(System.ArtifactsDirectory)/test_tool" --token $(AppCenterToken) --vsts-id-variable TestRunId
+        appcenter test run uitest --app "Daniel-Hindrikes/FormulaApp" --devices "Daniel-Hindrikes/ios-dev" --app-path "$(System.ArtifactsDirectory)/iOS_dev/FormulaApp.iOS.ipa" --test-series "master" --locale "sv_SE" --build-dir "$(System.ArtifactsDirectory)/tests" --uitest-tools-dir "$(System.ArtifactsDirectory)/test_tool" --token $(AppCenterToken) --vsts-id-variable TestRunId --async
        displayName: 'Bash Script'
        continueOnError: true
-     - bash: |
-        appcenter test download --test-run-id $(TestRunId)  
+    
    - job: WPF
      pool:
       vmImage: 'windows-latest'
      steps:
+     - task: DownloadBuildArtifacts@0
+       inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'wpf'
+        downloadPath: '$(System.ArtifactsDirectory)'
+     - task: DownloadBuildArtifacts@0
+       inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'wpf_tests'
+        downloadPath: '$(System.ArtifactsDirectory)'
      - task: Windows Application Driver@0
        inputs:
          OperationType: 'Start'
          AgentResolution: '1080p'
+     - task: VSTest@2
+       inputs:
+        testSelector: 'testAssemblies'
+        testAssemblyVer2: |
+         **\*test*.dll
+         !**\*TestAdapter.dll
+         !**\obj\**
+        searchFolder: '$(System.ArtifactsDirectory)/wpf_tests'
+
+     - task: Windows Application Driver@0
+       inputs:
+         OperationType: 'Stop'
