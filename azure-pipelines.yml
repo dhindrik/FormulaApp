@@ -73,6 +73,92 @@ stages:
        ArtifactName: 'wpf_tests'
        publishLocation: 'Container'   
 
+  - job: android
+    steps:
+    - task: UseDotNet@2
+      inputs:
+       packageType: 'sdk'
+       version: '3.x'
+
+    - task: NuGetToolInstaller@1
+      displayName: 'Use NuGet 5.2.0'
+      inputs:
+       versionSpec: 5.2.0
+
+    - task: NuGetCommand@2
+      displayName: 'NuGet restore'
+      inputs:
+       command: 'restore'
+      
+    - task: vs-publisher-473885.motz-mobile-buildtasks.android-manifest-version.android-manifest-version@1
+      displayName: 'Bump Android Version'
+      inputs:
+       sourcePath: FormulaApp.Android/Properties/AndroidManifest.xml
+       versionName: '$(Build.BuildNumber)'
+       versionCode: '$(Build.BuildId)'
+
+    - task: vs-publisher-473885.motz-mobile-buildtasks.android-manifest-package-name.android-manifest-package-name@1
+      displayName: 'Change package name'
+      inputs:
+       sourcePath: FormulaApp.Android/Properties/AndroidManifest.xml
+       packageName: hindrikes.formulaapp.dev
+       appLabel: 'Formula App Dev'
+
+    - task: XamarinAndroid@1
+      displayName: 'Build Android Dev'
+      inputs:
+        projectFile: 'FormulaApp.Android/FormulaApp.Android.csproj'
+        target: '$(build.binariesDirectory)/bin/dev'
+        configuration: 'Release'
+        jdkOption: 'JDKVersion'
+    
+
+    - task: vs-publisher-473885.motz-mobile-buildtasks.android-manifest-package-name.android-manifest-package-name@1
+      displayName: 'Change package name'
+      inputs:
+       sourcePath: FormulaApp.Android/Properties/AndroidManifest.xml
+       packageName: hindrikes.formulaapp
+       appLabel: 'Formula App'
+
+    - task: XamarinAndroid@1
+      displayName: 'Build Android Dev'
+      inputs:
+        projectFile: 'FormulaApp.Android/FormulaApp.Android.csproj'
+        target: '$(build.binariesDirectory)/bin/release'
+        configuration: 'Release'
+        jdkOption: 'JDKVersion'
+
+    - task: AndroidSigning@3
+      displayName: 'Signing and aligning APK file(s) **/*.apk'
+      inputs:
+       apksignerKeystoreFile: FormulaApp.keystore
+       apksignerKeystorePassword: '$(KeystorePassword)'
+       apksignerKeystoreAlias: 'formulaapp'
+       apksignerKeyPassword: '$(KeystorePassword)'
+      
+    - task: CopyFiles@2
+      inputs:
+       SourceFolder: '$(build.binariesDirectory)/bin/dev'
+       Contents: '**/*.apk'
+       TargetFolder: '$(build.artifactstagingdirectory)/android_dev'
+
+    - task: CopyFiles@2
+      inputs:
+       SourceFolder: '$(build.binariesDirectory)/bin/release'
+       Contents: '**/*.apk'
+       TargetFolder: '$(build.artifactstagingdirectory)/android_release'
+    - task: PublishBuildArtifacts@1
+      inputs:
+       PathtoPublish: '$(build.artifactstagingdirectory)/android_dev'
+       ArtifactName: 'android_dev'
+       publishLocation: 'Container'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+       PathtoPublish: '$(build.artifactstagingdirectory)/android_release'
+       ArtifactName: 'android_release'
+       publishLocation: 'Container'
+
   - job: iOS
     steps:
      - task: Bash@3
@@ -242,6 +328,12 @@ stages:
        inputs:
         buildType: 'current'
         downloadType: 'single'
+        artifactName: 'android_dev'
+        downloadPath: '$(System.ArtifactsDirectory)'
+     - task: DownloadBuildArtifacts@0
+       inputs:
+        buildType: 'current'
+        downloadType: 'single'
         artifactName: 'tests'
         downloadPath: '$(System.ArtifactsDirectory)'
      - task: DownloadBuildArtifacts@0
@@ -264,6 +356,11 @@ stages:
      
      - bash: |
         appcenter test run uitest --app "Daniel-Hindrikes/FormulaApp" --devices "Daniel-Hindrikes/ios-dev" --app-path "$(System.ArtifactsDirectory)/iOS_dev/FormulaApp.iOS.ipa" --test-series "master" --locale "sv_SE" --build-dir "$(System.ArtifactsDirectory)/tests" --uitest-tools-dir "$(System.ArtifactsDirectory)/test_tool" --token $(AppCenterToken) --vsts-id-variable TestRunId --async
+       displayName: 'Bash Script'
+       continueOnError: true
+       
+     - bash: |
+        appcenter test run uitest --app "Daniel-Hindrikes/FormulaApp-1" --devices "Daniel-Hindrikes/android-dev" --app-path "$(System.ArtifactsDirectory)/android_dev/FormulaApp.iOS.apk" --test-series "master" --locale "sv_SE" --build-dir "$(System.ArtifactsDirectory)/tests" --uitest-tools-dir "$(System.ArtifactsDirectory)/test_tool" --token $(AppCenterToken) --vsts-id-variable TestRunId --async
        displayName: 'Bash Script'
        continueOnError: true
     
@@ -297,7 +394,7 @@ stages:
      - task: Windows Application Driver@0
        inputs:
          OperationType: 'Stop'
-- stage: deploy
+- stage: deployDev
   jobs:
   - deployment: DeployDev
     displayName: Deploy to dev
@@ -320,6 +417,32 @@ stages:
                serverEndpoint: 'AppCenter'
                appSlug: 'Daniel-Hindrikes/FormulaApp'
                appFile: '$(System.ArtifactsDirectory)/iOS_dev/FormulaApp.iOS.ipa'
+               releaseNotesOption: 'input'
+               releaseNotesInput: 'New improvments.'
+               destinationType: 'groups'
+- stage: deployStore
+  jobs:
+  - deployment: DeployDev
+    displayName: Deploy to dev
+    pool:
+      vmImage: 'macos-latest'
+    environment: 'Store'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'iOS_release'
+              downloadPath: '$(System.ArtifactsDirectory)'
+              
+          - task: AppCenterDistribute@3
+            inputs:
+               serverEndpoint: 'AppCenter'
+               appSlug: 'Daniel-Hindrikes/Formula-App-Store'
+               appFile: '$(System.ArtifactsDirectory)/iOS_release/FormulaApp.iOS.ipa'
                releaseNotesOption: 'input'
                releaseNotesInput: 'New improvments.'
                destinationType: 'groups'
