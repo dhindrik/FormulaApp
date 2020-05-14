@@ -14,7 +14,7 @@ variables:
  - name: XCODE_VERSION
    value: 11.4  
  - name: WpfAppId
-   value: '$(System.ArtifactsDirectory)/wpf/FormulaApp.WPF.exe'  
+   value: '$(System.ArtifactsDirectory)\wpf\FormulaApp.WPF.exe'  
  - group: 'AppSecrets'
 
 stages:
@@ -61,11 +61,6 @@ stages:
        SourceFolder: 'FormulaApp.WPF.UiTests/bin/WPF'
        Contents: '**/*.dll'
        TargetFolder: '$(build.artifactstagingdirectory)/wpf_tests'
-    - task: CopyFiles@2
-      inputs:
-       SourceFolder: 'FormulaApp.WPF.UiTests/'
-       Contents: '**/*.cs'
-       TargetFolder: '$(build.artifactstagingdirectory)/source'
      
     - task: PublishBuildArtifacts@1
       inputs:
@@ -77,11 +72,6 @@ stages:
        PathtoPublish: '$(build.artifactstagingdirectory)/wpf_tests'
        ArtifactName: 'wpf_tests'
        publishLocation: 'Container'   
-    - task: PublishBuildArtifacts@1
-      inputs:
-       PathtoPublish: '$(build.artifactstagingdirectory)/source'
-       ArtifactName: 'source'
-       publishLocation: 'Container'
 
   - job: iOS
     steps:
