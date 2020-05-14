@@ -75,7 +75,7 @@ stages:
        publishLocation: 'Container'   
     - task: PublishBuildArtifacts@1
       inputs:
-       PathtoPublish: 'ForumlaApp.WPF.UiTests'
+       PathtoPublish: '$(Build.SourcesDirectory)/ForumlaApp.WPF.UiTests/'
        ArtifactName: 'wpf_test_code'
        publishLocation: 'Container'
 
